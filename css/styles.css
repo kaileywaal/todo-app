@@ -56,8 +56,9 @@ body {
 /* Checkbox */
 .checkbox {
   border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
 }
 
 .checkbox--checked {
@@ -135,4 +136,41 @@ body {
 
 .dark-mode .checked {
   color: var(--color-light-darkest-text);
+}
+
+/* Dark Mode Toggle Button */
+.btn-toggle {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Input field */
+.input__container {
+  width: 100%;
+  background-color: var(--color-light-list);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.dark-mode .input__container {
+  background-color: var(--color-dark-list);
+}
+
+#new-todo {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  height: 100%;
+}
+
+.input__checkbox {
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  top: 3px;
+  margin-right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--color-light-details);
 }
