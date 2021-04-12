@@ -31,29 +31,55 @@ body {
   background: var(--color-light-background);
 }
 
+.dark-mode {
+  background: var(--color-dark-background);
+}
+
 /* Light Mode Checklist */
 .checklist {
-  background-color: var(--color-light-list);
   padding: 0;
   border-radius: 0.5rem;
 }
 
+.checklist--light-mode {
+  background-color: var(--color-light-list);
+}
+
+.checklist--dark-mode {
+  background-color: var(--color-dark-list);
+}
+
 .checklist__item {
-  border-bottom: 1px solid var(--color-light-details);
   list-style: none;
   padding: 1.5rem;
   display: flex;
   align-items: center;
 }
 
+.checklist--light-mode .checklist__item {
+  border-bottom: 1px solid var(--color-light-details);
+}
+
+.checklist--dark-mode .checklist__item {
+  color: var(--color-dark-text);
+  border-bottom: 1px solid var(--color-dark-darkest);
+}
+
 .checklist__item::before {
   content: "";
   display: inline-block;
-  border: 1px solid var(--color-light-details);
   height: 2rem;
   width: 2rem;
   border-radius: 100%;
   margin-right: 1.5rem;
+}
+
+.checklist--light-mode .checklist__item::before {
+  border: 1px solid var(--color-light-details);
+}
+
+.checklist--dark-mode .checklist__item::before {
+  border: 1px solid var(--color-dark-darkest);
 }
 
 .checklist__item:last-of-type {
@@ -66,3 +92,8 @@ body {
   display: inline-block;
   margin-left: auto;
 }
+
+/* Dark Mode Checklist */
+/* .dark-mode .checklist {
+  background-color: var(--color-dark-list);
+} */
