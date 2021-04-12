@@ -45,6 +45,10 @@ body {
   background-repeat: no-repeat;
 }
 
+h1 {
+  color: var(--color-light-list);
+}
+
 /* @media screen and (min-width: 375px) {
   body {
     background-image: url(../images/bg-desktop-light.jpg);
@@ -57,7 +61,7 @@ body {
 
 /* Container */
 .container {
-  margin: 3rem;
+  margin: 0 4rem;
   max-width: 60rem;
 }
 
@@ -225,4 +229,11 @@ body {
   .toggle-states__state {
     padding: 0 1rem;
   }
+}
+
+/* Hero */
+.hero {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: space-between;
 }
