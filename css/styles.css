@@ -80,3 +80,15 @@ body {
 .checklist__item:last-of-type {
   border-bottom: 0;
 }
+
+.checked {
+  text-decoration: line-through;
+}
+
+.light-mode .checked {
+  color: var(--color-light-details);
+}
+
+.dark-mode .checked {
+  color: var(--color-light-darkest-text);
+}
