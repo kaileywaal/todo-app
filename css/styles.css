@@ -130,9 +130,6 @@ body {
 
 .checked {
   text-decoration: line-through;
-}
-
-.checked {
   color: var(--color-light-details);
 }
 
