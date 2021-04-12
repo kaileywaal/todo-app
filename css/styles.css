@@ -21,10 +21,48 @@
 
 html {
   font-size: 62.5%;
+  color: var(--color-light-darkest-text);
 }
 
 body {
   font-size: 1.8rem;
   font-family: "Josefin Sans", sans-serif;
   font-size: 400;
+  background: var(--color-light-background);
+}
+
+/* Light Mode Checklist */
+.checklist {
+  background-color: var(--color-light-list);
+  padding: 0;
+  border-radius: 0.5rem;
+}
+
+.checklist__item {
+  border-bottom: 1px solid var(--color-light-details);
+  list-style: none;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.checklist__item::before {
+  content: "";
+  display: inline-block;
+  border: 1px solid var(--color-light-details);
+  height: 2rem;
+  width: 2rem;
+  border-radius: 100%;
+  margin-right: 1.5rem;
+}
+
+.checklist__item:last-of-type {
+  border-bottom: 0;
+}
+
+.checklist__item::after {
+  content: url(../images/icon-cross.svg);
+  align-self: flex-end;
+  display: inline-block;
+  margin-left: auto;
 }
