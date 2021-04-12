@@ -35,20 +35,34 @@ body {
   font-family: "Josefin Sans", sans-serif;
   font-size: 400;
   background: var(--color-light-background);
+  /* background-image: url(../images/bg-mobile-light.jpg); */
+  background-repeat: no-repeat;
 }
 
 .dark-mode {
   background: var(--color-dark-background);
+  /* background-image: url(../images/bg-mobile-dark.jpg); */
+  background-repeat: no-repeat;
 }
+
+/* @media screen and (min-width: 375px) {
+  body {
+    background-image: url(../images/bg-desktop-light.jpg);
+  }
+
+  .dark-mode {
+    background-image: url(../images/bg-desktop-dark.jpg);
+  }
+} */
 
 /* Container */
 .container {
   margin: 3rem;
+  max-width: 60rem;
 }
 
 @media screen and (min-width: 650px) {
   .container {
-    max-width: 60rem;
     margin: auto;
   }
 }
@@ -102,9 +116,6 @@ body {
 .checklist {
   padding: 0;
   border-radius: 0.5rem;
-}
-
-.checklist {
   background-color: var(--color-light-list);
 }
 
@@ -173,4 +184,45 @@ body {
   width: 2rem;
   height: 2rem;
   border: 1px solid var(--color-light-details);
+}
+
+/* Todo list data */
+.todo-data {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  font-size: 1.6rem;
+  padding: 2rem;
+  margin: 0 auto;
+  color: var(--color-light-dark-text);
+}
+
+.items-left {
+  display: flex;
+}
+
+.items-left__number {
+  padding-right: 1rem;
+}
+
+.toggle-states {
+  display: none;
+}
+
+.toggle-states__state:hover,
+.clear-completed:hover {
+  color: var(--color-light-darkest-text);
+  cursor: pointer;
+}
+
+@media screen and (min-width: 600px) {
+  .toggle-states {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+  }
+
+  .toggle-states__state {
+    padding: 0 1rem;
+  }
 }
