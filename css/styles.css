@@ -231,6 +231,10 @@ input {
   margin-bottom: 2rem;
 }
 
+.dark-mode .todo-data {
+  background-color: var(--color-dark-list);
+}
+
 .items-left {
   display: flex;
 }
