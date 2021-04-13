@@ -150,6 +150,18 @@ h1 {
   height: 2rem;
 }
 
+.checklist {
+  pointer-events: none;
+}
+
+.checklist > .checklist__item {
+  pointer-events: auto;
+}
+
+.checklist:hover > .checklist__item:not(:hover)::after {
+  display: none;
+}
+
 /* Dark Mode Toggle Button */
 .btn-toggle {
   background: none;
