@@ -81,6 +81,10 @@ h1 {
   border: 1px solid var(--color-light-details);
 }
 
+.checkbox:hover {
+  cursor: pointer;
+}
+
 .checkbox img {
   display: none;
 }
@@ -145,13 +149,18 @@ h1 {
   color: var(--color-light-darkest-text);
 }
 
-.checklist__item::after {
+.checklist__item--delete {
   content: url(../images/icon-cross.svg);
   margin-left: auto;
   height: 2rem;
 }
 
-.checklist:hover > .checklist__item:not(:hover)::after {
+.checklist__item--delete:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.checklist:hover > .checklist__item--delete:not(:hover) {
   display: none;
 }
 
@@ -183,6 +192,7 @@ h1 {
   outline: none;
   border: none;
   height: 100%;
+  width: 90%;
 }
 
 .input__checkbox {
