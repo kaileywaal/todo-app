@@ -161,6 +161,10 @@ h1 {
   outline: none;
 }
 
+.btn-toggle:hover {
+  cursor: pointer;
+}
+
 /* Input field */
 .input__container {
   width: 100%;
@@ -195,10 +199,14 @@ input::placeholder {
   color: var(--color-dark-darker-text);
 }
 
-input:focus,
 input {
+  color: var(--color-light-darkest-text);
+}
+
+.dark-mode input {
   color: var(--color-dark-text);
 }
+
 /* Todo list data */
 .todo-data {
   display: flex;
