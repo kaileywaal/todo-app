@@ -1,0 +1,43 @@
+<header class="container hero">
+  <h1>TODO</h1>
+  <button class="btn-toggle">
+    <img class="toggle__image" src="images/icon-moon.svg" alt="" />
+  </button>
+</header>
+<div class="container">
+  <div class="input__container">
+    <span class="input__checkbox"></span>
+    <input type="text" id="new-todo" placeholder="Create a new todo" required />
+  </div>
+</div>
+<div class="container">
+  <ul class="checklist">
+    <li class="checklist__item">
+      <span class="checkbox unchecked"
+        ><img src="images/icon-check.svg" alt="" /></span
+      >Jog around park
+    </li>
+    <li class="checklist__item">
+      <span class="checkbox unchecked"
+        ><img src="images/icon-check.svg" alt="" /></span
+      >Do other stuff
+    </li>
+    <li class="checklist__item">
+      <span class="checkbox unchecked"
+        ><img src="images/icon-check.svg" alt="" /></span
+      >Finish JavaScript Portion
+    </li>
+    <div class="todo-data container">
+      <span class="items-left">
+        <p class="items-left__number">0</p>
+        <p>Items Left</p>
+      </span>
+      <ul class="toggle-states">
+        <li class="toggle-states__state">All</li>
+        <li class="toggle-states__state">Active</li>
+        <li class="toggle-states__state">Completed</li>
+      </ul>
+      <p class="clear-completed">Clear Completed</p>
+    </div>
+  </ul>
+</div>

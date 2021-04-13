@@ -35,13 +35,13 @@ body {
   font-family: "Josefin Sans", sans-serif;
   font-size: 400;
   background: var(--color-light-background);
-  /* background-image: url(../images/bg-mobile-light.jpg); */
+  background-image: url(../images/bg-mobile-light.jpg);
   background-repeat: no-repeat;
 }
 
 .dark-mode {
   background: var(--color-dark-background);
-  /* background-image: url(../images/bg-mobile-dark.jpg); */
+  background-image: url(../images/bg-mobile-dark.jpg);
   background-repeat: no-repeat;
 }
 
@@ -49,7 +49,7 @@ h1 {
   color: var(--color-light-list);
 }
 
-/* @media screen and (min-width: 375px) {
+@media screen and (min-width: 375px) {
   body {
     background-image: url(../images/bg-desktop-light.jpg);
   }
@@ -57,7 +57,7 @@ h1 {
   .dark-mode {
     background-image: url(../images/bg-desktop-dark.jpg);
   }
-} */
+}
 
 /* Container */
 .container {
@@ -136,10 +136,6 @@ h1 {
   border-bottom: 1px solid var(--color-dark-darkest);
 }
 
-.checklist__item:last-of-type {
-  border-bottom: 0;
-}
-
 .checked {
   text-decoration: line-through;
   color: var(--color-light-details);
@@ -198,7 +194,7 @@ h1 {
   width: 100%;
   justify-content: space-between;
   font-size: 1.6rem;
-  padding: 2rem;
+  padding: 0 2rem;
   margin: 0 auto;
   color: var(--color-light-dark-text);
 }
@@ -225,6 +221,7 @@ h1 {
   .toggle-states {
     list-style: none;
     padding-left: 0;
+    margin: auto;
     display: flex;
   }
 
