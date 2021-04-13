@@ -41,12 +41,13 @@ body {
 
 .dark-mode {
   background: var(--color-dark-background);
-  background-image: url(../images/bg-mobile-dark.jpg);
+  /* background-image: url(../images/bg-mobile-dark.jpg); */
   background-repeat: no-repeat;
 }
 
 h1 {
   color: var(--color-light-list);
+  letter-spacing: 1rem;
 }
 
 @media screen and (min-width: 375px) {
@@ -104,10 +105,8 @@ h1 {
 
 .dark-mode .checklist__item:hover .unchecked {
   border: double 1px transparent;
-  background: linear-gradient(
-    var(--color-dark-list, var(--color-dark-list)),
-    radial-gradient(circle at top left, hsl(192, 100%, 67%), hsl(280, 87%, 65%))
-  );
+  background: linear-gradient(hsl(235, 24%, 19%), hsl(235, 24%, 19%)),
+    radial-gradient(circle at top left, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
   background-origin: border-box;
   background-clip: content-box, border-box;
 }
@@ -125,7 +124,7 @@ h1 {
 
 .checklist__item {
   list-style: none;
-  padding: 1.5rem;
+  padding: 2rem;
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--color-light-details);
@@ -136,12 +135,12 @@ h1 {
   border-bottom: 1px solid var(--color-dark-darkest);
 }
 
-.checked {
+.completed {
   text-decoration: line-through;
   color: var(--color-light-details);
 }
 
-.dark-mode .checked {
+.dark-mode .completed {
   color: var(--color-light-darkest-text);
 }
 
@@ -163,7 +162,7 @@ h1 {
   width: 100%;
   background-color: var(--color-light-list);
   border-radius: 0.5rem;
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .dark-mode .input__container {
@@ -188,6 +187,14 @@ h1 {
   border: 1px solid var(--color-light-details);
 }
 
+input::placeholder {
+  color: var(--color-dark-darker-text);
+}
+
+input:focus,
+input {
+  color: var(--color-dark-text);
+}
 /* Todo list data */
 .todo-data {
   display: flex;
@@ -204,17 +211,38 @@ h1 {
 }
 
 .items-left__number {
-  padding-right: 1rem;
+  padding-right: 0.5rem;
 }
 
 .toggle-states {
   display: none;
 }
 
+.toggle-states--mobile {
+  display: flex;
+  list-style: none;
+  margin: auto;
+  background-color: var(--color-light-list);
+  justify-content: space-evenly;
+  font-size: 2rem;
+  color: var(--color-light-dark-text);
+  padding: 1.6rem;
+  border-radius: 0.5rem;
+}
+
+.dark-mode .toggle-states--mobile {
+  background-color: var(--color-dark-list);
+}
+
 .toggle-states__state:hover,
 .clear-completed:hover {
   color: var(--color-light-darkest-text);
   cursor: pointer;
+}
+
+.dark-mode .toggle-states__state:hover,
+.dark-mode .clear-completed:hover {
+  color: var(--color-dark-text-hover);
 }
 
 @media screen and (min-width: 600px) {
@@ -227,6 +255,10 @@ h1 {
 
   .toggle-states__state {
     padding: 0 1rem;
+  }
+
+  .toggle-states--mobile {
+    display: none;
   }
 }
 
