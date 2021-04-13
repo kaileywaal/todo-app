@@ -1,5 +1,5 @@
 
-
+// Toggle dark mode off and on.
 function toggleDarkMode() {
     document.getElementsByTagName("BODY")[0].classList.toggle('dark-mode');
     
@@ -12,6 +12,9 @@ function toggleDarkMode() {
     else 
         document.getElementsByClassName("toggle__image")[0].src = moon;
 }
+
+
+// Add todo list item
 
 function Todo(content) {
     this.status = "active",
@@ -42,7 +45,58 @@ input.addEventListener("keyup", function(event) {
         let newTodo = new Todo(input.value);
         input.value = "";
         addTodoToList(newTodo);
-        // document.getElementsByClassName("checklist").innerHTML = newTodo;
     }
 })
 
+// Add checked (complete) functionality
+addEventListener();
+
+function addEventListener() {
+    let checkboxes = document.getElementsByClassName("checkbox");
+    for(let checkbox of checkboxes) {
+        checkbox.addEventListener('click', toggleCheckbox);
+    }
+}
+
+function toggleCheckbox(checkbox) {
+    //prevents you from adding class to img tag
+    let obj = checkbox.target;
+    let classes = (obj.tagName === "SPAN") ? obj.classList : obj.parentElement.classList;
+    if(classes.contains("unchecked")){
+        classes.add("checked")
+        classes.remove("unchecked");
+    }
+    else {
+        classes.add("unchecked");
+        classes.remove("checked");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// Delete Items
+
+
+
+
+
+
+
+// Filter List
+
+
+
+
+
+
+
+// Determine number of items left
