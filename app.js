@@ -31,7 +31,9 @@ function addTodoToList(obj){
     checkbox.src = "images/icon-check.svg";
     span.appendChild(checkbox);
 
-    let text = document.createTextNode(obj.content);
+    let text = document.createElement("p");
+    text.innerHTML = obj.content;
+    text.setAttribute("contenteditable", true);
 
     let deleteButton = document.createElement("span");
     deleteButton.classList = "checklist__item--delete";
@@ -79,19 +81,20 @@ function deleteItem() {
 }
 
 function toggleCheckbox(checkbox) {
-    let parent = (this.tagName === "SPAN") ? this.parentElement : this.parentElement.parentElement;
-    parent.classList.toggle("completed");
-
     //prevents you from adding class to img tag
     let classes = (this.tagName === "SPAN") ? this.classList : this.parentElement.classList;
+    console.log(classes);
     if(classes.contains("unchecked")){
-        classes.add("checked")
+        classes.add("checked");
         classes.remove("unchecked");
     }
     else {
         classes.add("unchecked");
         classes.remove("checked");
     }
+
+    let parent = (this.tagName === "SPAN") ? this.parentElement : this.parentElement.parentElement;
+    parent.classList.toggle("completed");
     updateItemsRemaining();
 }
 

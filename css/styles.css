@@ -50,6 +50,12 @@ h1 {
   letter-spacing: 1rem;
 }
 
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus {
+  border: none;
+  outline: none;
+}
+
 @media screen and (min-width: 375px) {
   body {
     background-image: url(../images/bg-desktop-light.jpg);
@@ -75,8 +81,8 @@ h1 {
 /* Checkbox */
 .checkbox {
   border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
   margin-right: 2rem;
   border: 1px solid var(--color-light-details);
 }
@@ -96,7 +102,7 @@ h1 {
 
 .checked img {
   display: inline-block;
-  padding: 0.5rem;
+  padding: 0 0.5rem;
 }
 
 .checklist__item:hover .unchecked {
@@ -133,6 +139,10 @@ h1 {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--color-light-details);
+}
+
+.checklist__item p {
+  margin: 0;
 }
 
 .dark-mode .checklist__item {
@@ -192,7 +202,7 @@ h1 {
   outline: none;
   border: none;
   height: 100%;
-  width: 90%;
+  width: 80%;
 }
 
 .input__checkbox {
@@ -261,6 +271,10 @@ input {
 
 .dark-mode .toggle-states--mobile {
   background-color: var(--color-dark-list);
+}
+
+.clear-completed {
+  text-align: right;
 }
 
 .toggle-states__state:hover,
