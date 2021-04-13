@@ -16,6 +16,15 @@ Users should be able to:
 - Toggle light and dark mode
 - **Bonus**: Drag and drop to reorder items on the list
 
+### Built with
+
+- Vanilla JavaScript
+- Semantic HTML5 markup
+- CSS custom properties
+- Flexbox
+- Mobile-first workflow
+- [SortableJS](https://github.com/SortableJS/Sortable) - Sortable library for drag and drop functionality
+
 ### Useful resources
 
 - [Rounded linear gradient on hover](https://gist.github.com/stereokai/36dc0095b9d24ce93b045e2ddc60d7a0#file-gistfile1-txt) - Linear gradients can be used borders, but they are not compatible with a border radius. This article helped me figure out how to make a round linear gradient border for the checkboxes.
