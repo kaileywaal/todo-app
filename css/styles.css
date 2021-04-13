@@ -270,6 +270,10 @@ input {
   color: var(--color-dark-text-hover);
 }
 
+.active {
+  color: var(--color-active);
+}
+
 @media screen and (min-width: 600px) {
   .toggle-states {
     list-style: none;

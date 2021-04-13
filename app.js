@@ -41,8 +41,6 @@ function addTodoToList(obj){
     li.className = "checklist__item";
 
     document.getElementsByClassName("checklist")[0].appendChild(li);
-
-
 }
 
 let input = document.getElementById("new-todo");
@@ -57,6 +55,7 @@ input.addEventListener("keyup", function(event) {
     }
 })
 
+
 // Add checked and delete listeners
 addListeners();
 function addListeners() {
@@ -68,6 +67,10 @@ function addListeners() {
     let deleteButtons = document.getElementsByClassName("checklist__item--delete");
     for(let button of deleteButtons)
         button.addEventListener("click", deleteItem);
+
+    let filters = document.getElementsByClassName("toggle-states__state");
+    for(let filter of filters)
+        filter.addEventListener('click', filterList);
 }
 
 function deleteItem() {
@@ -92,12 +95,42 @@ function toggleCheckbox(checkbox) {
     updateItemsRemaining();
 }
 
+
 // Filter List
+function filterList() {
+    let filterButtons = document.getElementsByClassName("toggle-states__state");
+    for(let button of filterButtons) {
+        button.classList.remove("active");
+    }
+    this.classList.add("active");
+    
+
+    let checklistItems = Array.from(document.getElementsByClassName("checklist__item"));
+    if (this.innerHTML === "Active") {
+        checklistItems.forEach(item => {
+            item.style.display = (item.classList.contains("completed")) ? "none" : "flex";
+        })
+    }
+    else if (this.innerHTML === "Completed") {
+        checklistItems.forEach(item => {
+            item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
+        })
+    }
+    if (this.innerHTML === "All") {
+        for(let item of checklistItems)
+           item.style.display = "flex";
+    }
+}
 
 
+// Clear completed items
+let clearCompletedButton = document.getElementsByClassName("clear-completed")[0];
+clearCompletedButton.addEventListener('click', clearCompleted);
 
-
-
+function clearCompleted() {
+    let completedItems = document.getElementsByClassName("completed");
+    Array.from(completedItems).forEach(item => item.remove());
+}
 
 
 // Determine number of items left
@@ -108,6 +141,9 @@ function updateItemsRemaining() {
 
     let itemsDisplay = document.getElementsByClassName("items-left__number")[0];
     itemsDisplay.innerHTML = items;
+
+    let itemsDescription = document.getElementsByClassName("items-left__description")[0];
+    itemsDescription.innerHTML = items === 1 ? "item left" : "items left";
 }
 
 updateItemsRemaining();
