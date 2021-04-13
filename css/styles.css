@@ -124,8 +124,6 @@ h1 {
 /* Checklist Items*/
 .checklist {
   padding: 0;
-  border-radius: 0.5rem 0.5rem 0 0;
-  background-color: var(--color-light-list);
   margin-bottom: 0;
 }
 
@@ -139,6 +137,15 @@ h1 {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--color-light-details);
+  background-color: var(--color-light-list);
+}
+
+.dark-mode .checklist__item {
+  background-color: var(--color-dark-list);
+}
+
+.checklist__item:first-of-type {
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .checklist__item p {
@@ -314,4 +321,14 @@ input {
   margin-top: 4rem;
   display: flex;
   justify-content: space-between;
+}
+
+/* Drag and Drop */
+.ghost-class {
+  background-color: var(--color-light-details);
+  opacity: 50%;
+}
+
+.dark-mode .ghost-class {
+  background-color: var(--color-dark-darkest-text);
 }

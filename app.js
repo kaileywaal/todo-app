@@ -150,3 +150,9 @@ function updateItemsRemaining() {
 }
 
 updateItemsRemaining();
+
+// Make items sortable
+let el = document.getElementsByClassName('checklist')[0];
+let sortable = Sortable.create(el, {
+    ghostClass: "ghost-class"
+});
