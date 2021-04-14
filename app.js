@@ -1,17 +1,27 @@
 
 // Toggle dark mode off and on.
-function toggleDarkMode() {
-    document.getElementsByTagName("BODY")[0].classList.toggle('dark-mode');
-    
-    let moon = "images/icon-moon.svg";
-    let sun = "images/icon-sun.svg";
-    let imageSource = document.getElementsByClassName("toggle__image")[0].src;
-
-    if(imageSource.includes(moon)) 
-        document.getElementsByClassName("toggle__image")[0].src = sun;
-    else 
-        document.getElementsByClassName("toggle__image")[0].src = moon;
+function setTheme(themeName) {
+    localStorage.setItem('theme', themeName);
+    console.log(themeName);
+    document.documentElement.className = themeName;
 }
+
+function setSunAndMoon(sunOrMoon){
+    const moonIcon = "images/icon-moon.svg";
+    const sunIcon = "images/icon-sun.svg";
+    document.getElementsByClassName("toggle__image")[0].src = (sunOrMoon === "sun") ? sunIcon : moonIcon;
+}
+
+function toggleTheme() {
+    const test = localStorage.getItem('theme') === 'dark-mode';
+
+    test ? setTheme('light-mode') : setTheme('dark-mode');
+    test ? setSunAndMoon('moon') : setSunAndMoon('sun');
+}
+
+(function () {
+    localStorage.getItem('theme') === 'dark-mode' ? setTheme('dark-mode') : setTheme('light-mode');
+})();
 
 
 // Add todo list item
@@ -37,7 +47,7 @@ function addTodoToList(obj){
 
     let deleteButton = document.createElement("span");
     deleteButton.classList = "checklist__item--delete";
-    li.appendChild(span)
+    li.appendChild(span);
     li.appendChild(text);
     li.appendChild(deleteButton);
     li.className = "checklist__item";
@@ -83,7 +93,6 @@ function deleteItem() {
 function toggleCheckbox(checkbox) {
     //prevents you from adding class to img tag
     let classes = (this.tagName === "SPAN") ? this.classList : this.parentElement.classList;
-    console.log(classes);
     if(classes.contains("unchecked")){
         classes.add("checked");
         classes.remove("unchecked");
@@ -119,7 +128,7 @@ function filterList() {
             item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
         })
     }
-    if (this.innerHTML === "All") {
+    else {
         for(let item of checklistItems)
            item.style.display = "flex";
     }
@@ -138,15 +147,14 @@ function clearCompleted() {
 
 // Determine number of items left
 function updateItemsRemaining() {
-    let items = document.getElementsByClassName("checklist__item");
-    items = Array.from(items);
-    items = items.filter(item => item.classList.contains("completed") === false).length;
+    let items = Array.from(document.getElementsByClassName("checklist__item"));
+    let numberOfItems = items.filter(item => item.classList.contains("completed") === false).length;
 
     let itemsDisplay = document.getElementsByClassName("items-left__number")[0];
-    itemsDisplay.innerHTML = items;
+    itemsDisplay.innerHTML = numberOfItems;
 
     let itemsDescription = document.getElementsByClassName("items-left__description")[0];
-    itemsDescription.innerHTML = items === 1 ? "item left" : "items left";
+    itemsDescription.innerHTML = numberOfItems === 1 ? "item left" : "items left";
 }
 
 updateItemsRemaining();

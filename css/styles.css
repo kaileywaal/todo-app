@@ -4,19 +4,23 @@
     hsl(192, 100%, 67%),
     hsl(280, 87%, 65%)
   );
-  --color-light-list: hsl(0, 0%, 98%);
-  --color-light-background: hsl(236, 33%, 92%);
-  --color-light-details: hsl(233, 11%, 84%);
-  --color-light-dark-text: hsl(236, 9%, 61%);
-  --color-light-darkest-text: hsl(235, 19%, 35%);
+}
 
-  --color-dark-background: hsl(235, 21%, 11%);
-  --color-dark-list: hsl(235, 24%, 19%);
-  --color-dark-text: hsl(234, 39%, 85%);
-  --color-dark-text-hover: hsl(236, 33%, 92%);
-  --color-dark-darker-text: hsl(234, 11%, 52%);
-  --color-dark-darkest-text: hsl(233, 14%, 35%);
-  --color-dark-darkest: hsl(237, 14%, 26%);
+.light-mode {
+  --color-list: hsl(0, 0%, 98%);
+  --color-background: hsl(236, 33%, 92%);
+  --color-details: hsl(233, 11%, 84%);
+  --color-text: hsl(235, 19%, 35%);
+  --color-muted-text: hsl(236, 9%, 61%);
+}
+
+.dark-mode {
+  --color-list: hsl(235, 24%, 19%);
+  --color-background: hsl(235, 21%, 11%);
+  --color-details: hsl(233, 14%, 35%);
+  --color-text: hsl(234, 39%, 85%);
+  --color-text-hover: hsl(236, 33%, 92%);
+  --color-muted-text: hsl(234, 11%, 52%);
 }
 
 *,
@@ -28,25 +32,18 @@
 html {
   font-size: 62.5%;
   color: var(--color-light-darkest-text);
+  background: var(--color-background);
+  background-repeat: no-repeat;
 }
 
 body {
   font-size: 1.8rem;
   font-family: "Josefin Sans", sans-serif;
   font-size: 400;
-  background: var(--color-light-background);
-  background-image: url(../images/bg-mobile-light.jpg);
-  background-repeat: no-repeat;
-}
-
-.dark-mode {
-  background: var(--color-dark-background);
-  /* background-image: url(../images/bg-mobile-dark.jpg); */
-  background-repeat: no-repeat;
 }
 
 h1 {
-  color: var(--color-light-list);
+  color: hsl(0, 0%, 98%);
   letter-spacing: 1rem;
 }
 
@@ -56,8 +53,17 @@ h1 {
   outline: none;
 }
 
+/* Background Image */
+.light-mode {
+  background-image: url(../images/bg-mobile-light.jpg);
+}
+
+.dark-mode {
+  background-image: url(../images/bg-mobile-dark.jpg);
+}
+
 @media screen and (min-width: 375px) {
-  body {
+  .light-mode {
     background-image: url(../images/bg-desktop-light.jpg);
   }
 
@@ -84,7 +90,7 @@ h1 {
   min-width: 2rem;
   min-height: 2rem;
   margin-right: 2rem;
-  border: 1px solid var(--color-light-details);
+  border: 1px solid var(--color-details);
 }
 
 .checkbox:hover {
@@ -107,19 +113,19 @@ h1 {
 
 .checklist__item:hover .unchecked {
   border: double 1px transparent;
-  background: linear-gradient(var(--color-light-list), var(--color-light-list)),
+  background: linear-gradient(var(--color-list), var(--color-list)),
     radial-gradient(circle at top left, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
   background-origin: border-box;
   background-clip: content-box, border-box;
 }
 
-.dark-mode .checklist__item:hover .unchecked {
+/* .dark-mode .checklist__item:hover .unchecked {
   border: double 1px transparent;
   background: linear-gradient(hsl(235, 24%, 19%), hsl(235, 24%, 19%)),
     radial-gradient(circle at top left, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
   background-origin: border-box;
   background-clip: content-box, border-box;
-}
+} */
 
 /* Checklist Items*/
 .checklist {
@@ -128,7 +134,7 @@ h1 {
 }
 
 .dark-mode .checklist {
-  background-color: var(--color-dark-list);
+  background-color: var(--color-list);
 }
 
 .checklist__item {
@@ -136,12 +142,9 @@ h1 {
   padding: 2rem;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--color-light-details);
-  background-color: var(--color-light-list);
-}
-
-.dark-mode .checklist__item {
-  background-color: var(--color-dark-list);
+  border-bottom: 1px solid var(--color-details);
+  background-color: var(--color-list);
+  color: var(--color-text);
 }
 
 .checklist__item:first-of-type {
@@ -152,18 +155,9 @@ h1 {
   margin: 0;
 }
 
-.dark-mode .checklist__item {
-  color: var(--color-dark-text);
-  border-bottom: 1px solid var(--color-dark-darkest);
-}
-
 .completed {
   text-decoration: line-through;
-  color: var(--color-light-details);
-}
-
-.dark-mode .completed {
-  color: var(--color-light-darkest-text);
+  color: var(--color-details);
 }
 
 .checklist__item--delete {
@@ -195,13 +189,9 @@ h1 {
 /* Input field */
 .input__container {
   width: 100%;
-  background-color: var(--color-light-list);
+  background-color: var(--color-list);
   border-radius: 0.5rem;
   padding: 2rem;
-}
-
-.dark-mode .input__container {
-  background-color: var(--color-dark-list);
 }
 
 #new-todo {
@@ -220,19 +210,12 @@ h1 {
   margin-right: 1rem;
   width: 2rem;
   height: 2rem;
-  border: 1px solid var(--color-light-details);
+  border: 1px solid var(--color-details);
 }
 
+input,
 input::placeholder {
-  color: var(--color-dark-darker-text);
-}
-
-input {
-  color: var(--color-light-darkest-text);
-}
-
-.dark-mode input {
-  color: var(--color-dark-text);
+  color: var(--color-text);
 }
 
 /* Todo list data */
@@ -242,14 +225,10 @@ input {
   justify-content: space-between;
   font-size: 1.6rem;
   padding: 0 2rem;
-  color: var(--color-light-dark-text);
-  background-color: var(--color-light-list);
+  color: var(--color-muted-text);
+  background-color: var(--color-list);
   border-radius: 0 0 0.5rem 0.5rem;
   margin-bottom: 2rem;
-}
-
-.dark-mode .todo-data {
-  background-color: var(--color-dark-list);
 }
 
 .items-left {
@@ -268,16 +247,12 @@ input {
   display: flex;
   list-style: none;
   margin: auto;
-  background-color: var(--color-light-list);
+  background-color: var(--color-list);
   justify-content: space-evenly;
   font-size: 2rem;
-  color: var(--color-light-dark-text);
+  color: var(--color-muted-text);
   padding: 1.6rem;
   border-radius: 0.5rem;
-}
-
-.dark-mode .toggle-states--mobile {
-  background-color: var(--color-dark-list);
 }
 
 .clear-completed {
@@ -286,13 +261,8 @@ input {
 
 .toggle-states__state:hover,
 .clear-completed:hover {
-  color: var(--color-light-darkest-text);
+  color: var(--color-text);
   cursor: pointer;
-}
-
-.dark-mode .toggle-states__state:hover,
-.dark-mode .clear-completed:hover {
-  color: var(--color-dark-text-hover);
 }
 
 .active {
@@ -325,10 +295,6 @@ input {
 
 /* Drag and Drop */
 .ghost-class {
-  background-color: var(--color-light-details);
+  background-color: var(--color-muted-text);
   opacity: 50%;
-}
-
-.dark-mode .ghost-class {
-  background-color: var(--color-dark-darkest-text);
 }
