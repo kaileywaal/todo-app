@@ -119,14 +119,6 @@ h1 {
   background-clip: content-box, border-box;
 }
 
-/* .dark-mode .checklist__item:hover .unchecked {
-  border: double 1px transparent;
-  background: linear-gradient(hsl(235, 24%, 19%), hsl(235, 24%, 19%)),
-    radial-gradient(circle at top left, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
-  background-origin: border-box;
-  background-clip: content-box, border-box;
-} */
-
 /* Checklist Items*/
 .checklist {
   padding: 0;
@@ -202,7 +194,9 @@ h1 {
   width: 80%;
 }
 
-.input__checkbox {
+.input__submit {
+  background-color: var(--color-list);
+  outline: none;
   border-radius: 50%;
   display: inline-block;
   position: relative;

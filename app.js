@@ -2,8 +2,8 @@
 // Toggle dark mode off and on.
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
-    console.log(themeName);
     document.documentElement.className = themeName;
+    document.getElementsByClassName("toggle__image")[0].src = themeName === 'light-mode' ? "images/icon-moon.svg" : "images/icon-sun.svg";
 }
 
 function setSunAndMoon(sunOrMoon){
@@ -24,48 +24,62 @@ function toggleTheme() {
 })();
 
 
-// Add todo list item
+// Add todo list item    
+const todos = [];
+const input = document.getElementById("new-todo");
+const submitButton = document.getElementsByClassName('input__submit')[0];
+
+input.addEventListener("keyup", function(event) {
+    if(event.key !== "Enter") return;
+    event.preventDefault();
+    addTodo(input.value);
+});
+
+submitButton.addEventListener("click", function(event){
+    event.preventDefault();
+    addTodo(input.value);
+});
+
+function addTodo(inputValue){
+    if (inputValue.length === 0) return;
+    let newTodo = new Todo(inputValue);
+    todos.push(newTodo);
+    console.log(todos);
+    renderTodos(todos);
+    addListeners();
+    updateItemsRemaining();
+    input.value = "";
+}
 
 function Todo(content) {
-    this.status = "active",
+    this.checked = "unchecked",
     this.content = content;
 }
 
-function addTodoToList(obj){
-    let li = document.createElement("li");
+function renderTodos(array) {
+    array.forEach(todo => {
+        let li = document.createElement("li");
 
-    let span = document.createElement("span");
-    span.classList = "checkbox unchecked";
+        let span = document.createElement("span");
+        span.classList = "checkbox " + todo.checked;
+        let checkbox = document.createElement("img");
+        checkbox.src = "images/icon-check.svg";
+        span.appendChild(checkbox);
 
-    let checkbox = document.createElement("img");
-    checkbox.src = "images/icon-check.svg";
-    span.appendChild(checkbox);
+        let text = document.createElement("p");
+        text.innerHTML = todo.content;
+        text.setAttribute("contenteditable", true);
 
-    let text = document.createElement("p");
-    text.innerHTML = obj.content;
-    text.setAttribute("contenteditable", true);
+        let deleteButton = document.createElement("span");
+        deleteButton.classList = "checklist__item--delete";
+        li.appendChild(span);
+        li.appendChild(text);
+        li.appendChild(deleteButton);
+        li.className = "checklist__item";
 
-    let deleteButton = document.createElement("span");
-    deleteButton.classList = "checklist__item--delete";
-    li.appendChild(span);
-    li.appendChild(text);
-    li.appendChild(deleteButton);
-    li.className = "checklist__item";
-
-    document.getElementsByClassName("checklist")[0].appendChild(li);
+     document.getElementsByClassName("checklist")[0].appendChild(li);
+    })
 }
-
-let input = document.getElementById("new-todo");
-input.addEventListener("keyup", function(event) {
-    if(event.key === "Enter") {
-        if (input.value.length === 0) return;
-        let newTodo = new Todo(input.value);
-        input.value = "";
-        addTodoToList(newTodo);
-        addListeners();
-        updateItemsRemaining();
-    }
-})
 
 
 // Add checked and delete listeners
