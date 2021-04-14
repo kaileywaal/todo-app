@@ -1,5 +1,18 @@
+//connect to json files
+let todos = JSON.parse(localStorage.getItem("todos")) || [ 
+    {
+        "content": "Toggle between light and dark mode",
+        "completed": false
+    },
+    {
+        "content": "Add your first item in the text box above!",
+        "completed": false
+    }
+];
+renderTodos(todos);
+localStorage.setItem("todos", JSON.stringify(todos));
 
-// Toggle dark mode off and on.
+// Toggle dark mode
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
@@ -25,7 +38,7 @@ function toggleTheme() {
 
 
 // Add todo list item    
-const todos = [];
+// const todos = [];
 const input = document.getElementById("new-todo");
 const submitButton = document.getElementsByClassName('input__submit')[0];
 
@@ -43,41 +56,41 @@ submitButton.addEventListener("click", function(event){
 function addTodo(inputValue){
     if (inputValue.length === 0) return;
     let newTodo = new Todo(inputValue);
+    JSON.parse(localStorage.getItem('todos'));
     todos.push(newTodo);
-    console.log(todos);
-    renderTodos(todos);
+    renderTodos([newTodo]);
+    localStorage.setItem("todos", JSON.stringify(todos));
     addListeners();
     updateItemsRemaining();
     input.value = "";
 }
 
 function Todo(content) {
-    this.checked = "unchecked",
     this.content = content;
+    this.completed = false;
 }
 
 function renderTodos(array) {
     array.forEach(todo => {
-        let li = document.createElement("li");
+        const li = document.createElement("li");
+        const span = document.createElement("span");
+        const checkbox = document.createElement("img");
+        const text = document.createElement("p");
+        const deleteButton = document.createElement("span");
+        let checked = todo.completed === false ? "unchecked" : "checked";
 
-        let span = document.createElement("span");
-        span.classList = "checkbox " + todo.checked;
-        let checkbox = document.createElement("img");
+        span.classList = "checkbox " + checked;
         checkbox.src = "images/icon-check.svg";
         span.appendChild(checkbox);
-
-        let text = document.createElement("p");
         text.innerHTML = todo.content;
         text.setAttribute("contenteditable", true);
-
-        let deleteButton = document.createElement("span");
         deleteButton.classList = "checklist__item--delete";
         li.appendChild(span);
         li.appendChild(text);
         li.appendChild(deleteButton);
         li.className = "checklist__item";
 
-     document.getElementsByClassName("checklist")[0].appendChild(li);
+        document.getElementsByClassName("checklist")[0].appendChild(li);
     })
 }
 
@@ -104,21 +117,23 @@ function deleteItem() {
     updateItemsRemaining();
 }
 
-function toggleCheckbox(checkbox) {
-    //prevents you from adding class to img tag
-    let classes = (this.tagName === "SPAN") ? this.classList : this.parentElement.classList;
-    if(classes.contains("unchecked")){
-        classes.add("checked");
-        classes.remove("unchecked");
-    }
-    else {
-        classes.add("unchecked");
-        classes.remove("checked");
-    }
+function toggleCheckbox(event) {
+    console.log(event.srcElement.parentElement);
 
-    let parent = (this.tagName === "SPAN") ? this.parentElement : this.parentElement.parentElement;
-    parent.classList.toggle("completed");
-    updateItemsRemaining();
+    // //prevents you from adding class to img tag
+    // let classes = (this.tagName === "SPAN") ? this.classList : this.parentElement.classList;
+    // if(classes.contains("unchecked")){
+    //     classes.add("checked");
+    //     classes.remove("unchecked");
+    // }
+    // else {
+    //     classes.add("unchecked");
+    //     classes.remove("checked");
+    // }
+
+    // let parent = (this.tagName === "SPAN") ? this.parentElement : this.parentElement.parentElement;
+    // parent.classList.toggle("completed");
+    // updateItemsRemaining();
 }
 
 
