@@ -9,7 +9,7 @@ let todos = JSON.parse(localStorage.getItem("todos")) || [
         "completed": false
     }
 ];
-renderTodos(todos);
+// renderTodos(todos);
 localStorage.setItem("todos", JSON.stringify(todos));
 
 // Toggle dark mode
@@ -38,7 +38,6 @@ function toggleTheme() {
 
 
 // Add todo list item    
-// const todos = [];
 const input = document.getElementById("new-todo");
 const submitButton = document.getElementsByClassName('input__submit')[0];
 
@@ -58,7 +57,7 @@ function addTodo(inputValue){
     let newTodo = new Todo(inputValue);
     JSON.parse(localStorage.getItem('todos'));
     todos.push(newTodo);
-    renderTodos([newTodo]);
+    newTodo.render();
     localStorage.setItem("todos", JSON.stringify(todos));
     addListeners();
     updateItemsRemaining();
@@ -68,32 +67,30 @@ function addTodo(inputValue){
 function Todo(content) {
     this.content = content;
     this.completed = false;
+    
+    this.render = function() {
+        this.li = document.createElement("li");
+        this.span = document.createElement("span");
+        this.checkbox = document.createElement("img");
+        this.text = document.createElement("p");
+        this.deleteButton = document.createElement("span");
+
+        let checked = (this.completed === false) ? "unchecked" : "checked";
+        let completed = (this.completed === true) ? "completed" : "";
+
+        this.span.classList = "checkbox " + checked;
+        this.checkbox.src = "images/icon-check.svg";
+        this.span.appendChild(this.checkbox);
+        this.text.innerHTML = this.content;
+        this.text.setAttribute("contenteditable", true);
+        this.deleteButton.classList = "checklist__item--delete";
+        this.li.appendChild(this.span);
+        this.li.appendChild(this.text);
+        this.li.appendChild(this.deleteButton);
+        this.li.className = "checklist__item " + completed;
+        document.getElementsByClassName("checklist")[0].appendChild(this.li);
+    }
 }
-
-function renderTodos(array) {
-    array.forEach(todo => {
-        const li = document.createElement("li");
-        const span = document.createElement("span");
-        const checkbox = document.createElement("img");
-        const text = document.createElement("p");
-        const deleteButton = document.createElement("span");
-        let checked = todo.completed === false ? "unchecked" : "checked";
-
-        span.classList = "checkbox " + checked;
-        checkbox.src = "images/icon-check.svg";
-        span.appendChild(checkbox);
-        text.innerHTML = todo.content;
-        text.setAttribute("contenteditable", true);
-        deleteButton.classList = "checklist__item--delete";
-        li.appendChild(span);
-        li.appendChild(text);
-        li.appendChild(deleteButton);
-        li.className = "checklist__item";
-
-        document.getElementsByClassName("checklist")[0].appendChild(li);
-    })
-}
-
 
 // Add checked and delete listeners
 addListeners();
@@ -118,7 +115,7 @@ function deleteItem() {
 }
 
 function toggleCheckbox(event) {
-    console.log(event.srcElement.parentElement);
+
 
     // //prevents you from adding class to img tag
     // let classes = (this.tagName === "SPAN") ? this.classList : this.parentElement.classList;
