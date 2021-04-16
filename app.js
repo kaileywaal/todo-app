@@ -1,4 +1,4 @@
-//connect to json files
+// Render todos saved in local storage on page load
 let todos = JSON.parse(localStorage.getItem("todos")) || [ 
     {
         "content": "Toggle between light and dark mode",
@@ -9,8 +9,33 @@ let todos = JSON.parse(localStorage.getItem("todos")) || [
         "completed": false
     }
 ];
-// renderTodos(todos);
+
+renderTodos(todos);
 localStorage.setItem("todos", JSON.stringify(todos));
+
+function renderTodos(array) {
+    array.forEach(todo => {
+        const li = document.createElement("li");
+        const span = document.createElement("span");
+        const checkbox = document.createElement("img");
+        const text = document.createElement("p");
+        const deleteButton = document.createElement("span");
+        let checked = todo.completed === false ? "unchecked" : "checked";
+        let completed = todo.completed === true ? "completed" : "";
+
+        span.classList = "checkbox " + checked;
+        checkbox.src = "images/icon-check.svg";
+        span.appendChild(checkbox);
+        text.innerHTML = todo.content;
+        text.setAttribute("contenteditable", true);
+        deleteButton.classList = "checklist__item--delete";
+        li.appendChild(span);
+        li.appendChild(text);
+        li.appendChild(deleteButton);
+        li.className = "checklist__item " + completed;
+        document.getElementsByClassName("checklist")[0].appendChild(li);
+   })
+}
 
 // Toggle dark mode
 function setTheme(themeName) {
@@ -37,7 +62,7 @@ function toggleTheme() {
 })();
 
 
-// Add todo list item    
+// Add todo list object and render it in the DOM   
 const input = document.getElementById("new-todo");
 const submitButton = document.getElementsByClassName('input__submit')[0];
 
@@ -55,11 +80,11 @@ submitButton.addEventListener("click", function(event){
 function addTodo(inputValue){
     if (inputValue.length === 0) return;
     let newTodo = new Todo(inputValue);
+    newTodo.render();
     JSON.parse(localStorage.getItem('todos'));
     todos.push(newTodo);
-    newTodo.render();
     localStorage.setItem("todos", JSON.stringify(todos));
-    addListeners();
+    //addListeners();
     updateItemsRemaining();
     input.value = "";
 }
@@ -67,54 +92,78 @@ function addTodo(inputValue){
 function Todo(content) {
     this.content = content;
     this.completed = false;
-    
+    let rendered = false;
+
     this.render = function() {
-        this.li = document.createElement("li");
-        this.span = document.createElement("span");
-        this.checkbox = document.createElement("img");
-        this.text = document.createElement("p");
-        this.deleteButton = document.createElement("span");
+        if (rendered === false) {
+            this.li = document.createElement("li");
+            document.getElementsByClassName("checklist")[0].appendChild(this.li);
+        
+            this.span = document.createElement("span");
+            this.li.appendChild(this.span);
+            this.span.addEventListener('click', this, false);
+        
+            this.checkbox = document.createElement("img");
+            this.checkbox.src = "images/icon-check.svg";
+            this.span.appendChild(this.checkbox);
+        
+            this.text = document.createElement("p");
+            this.text.innerHTML = this.content;
+            this.text.setAttribute("contenteditable", true);
+            this.li.appendChild(this.text);
+        
+            this.deleteButton = document.createElement("span");
+            this.deleteButton.classList = "checklist__item--delete";
+            this.li.appendChild(this.deleteButton);
+
+            rendered = true;
+        }
 
         let checked = (this.completed === false) ? "unchecked" : "checked";
-        let completed = (this.completed === true) ? "completed" : "";
-
         this.span.classList = "checkbox " + checked;
-        this.checkbox.src = "images/icon-check.svg";
-        this.span.appendChild(this.checkbox);
-        this.text.innerHTML = this.content;
-        this.text.setAttribute("contenteditable", true);
-        this.deleteButton.classList = "checklist__item--delete";
-        this.li.appendChild(this.span);
-        this.li.appendChild(this.text);
-        this.li.appendChild(this.deleteButton);
-        this.li.className = "checklist__item " + completed;
-        document.getElementsByClassName("checklist")[0].appendChild(this.li);
+
+        let completed = (this.completed === true) ? "completed" : "";
+        this.li.className = "checklist__item " + completed;  
     }
 }
 
+
+Todo.prototype.handleEvent = function(event) {
+    if (event.type === 'click') {
+        this.completed = (this.completed === true) ? false : true;
+        this.render();
+    }
+}
+
+// function toggleState(event) {
+//     if( event.target.tagName === "SPAN") {
+//         console.log( this. );
+//     }
+
+// }
+
+//Todo.addEventListener('click', console.log(this));
 // Add checked and delete listeners
-addListeners();
-function addListeners() {
-    let checkboxes = document.getElementsByClassName("checkbox");
-    for(let checkbox of checkboxes) {
-        checkbox.addEventListener('click', toggleCheckbox);
-    }
+// addListeners();
+// function addListeners() {
+//     let checkboxes = document.getElementsByClassName("checkbox");
+//     for(let checkbox of checkboxes) {
+//         checkbox.addEventListener('click', toggleCheckbox);
+//     }
 
-    let deleteButtons = document.getElementsByClassName("checklist__item--delete");
-    for(let button of deleteButtons)
-        button.addEventListener("click", deleteItem);
+//     let deleteButtons = document.getElementsByClassName("checklist__item--delete");
+//     for(let button of deleteButtons)
+//         button.addEventListener("click", deleteItem);
 
-    let filters = document.getElementsByClassName("toggle-states__state");
-    for(let filter of filters)
-        filter.addEventListener('click', filterList);
-}
+//     let filters = document.getElementsByClassName("toggle-states__state");
+//     for(let filter of filters)
+//         filter.addEventListener('click', filterList);
+// }
 
-function deleteItem() {
-    this.parentElement.remove();
-    updateItemsRemaining();
-}
-
-function toggleCheckbox(event) {
+// function deleteItem() {
+//     this.parentElement.remove();
+//     updateItemsRemaining();
+// }
 
 
     // //prevents you from adding class to img tag
@@ -131,7 +180,6 @@ function toggleCheckbox(event) {
     // let parent = (this.tagName === "SPAN") ? this.parentElement : this.parentElement.parentElement;
     // parent.classList.toggle("completed");
     // updateItemsRemaining();
-}
 
 
 // Filter List
