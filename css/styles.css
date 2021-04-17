@@ -99,6 +99,7 @@ h1 {
 
 .checkbox img {
   display: none;
+  pointer-events: none;
 }
 
 .checked {
