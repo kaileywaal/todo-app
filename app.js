@@ -1,41 +1,109 @@
 // Render todos saved in local storage on page load
-let todos = JSON.parse(localStorage.getItem("todos")) || [ 
-    {
-        "content": "Toggle between light and dark mode",
-        "completed": false
-    },
-    {
-        "content": "Add your first item in the text box above!",
-        "completed": false
-    }
-];
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
+//|| [ 
+    // {
+    //     "content": "Toggle between light and dark mode",
+    //     "completed": false
+    // },
+    // {
+    //     "content": "Add your first item in the text box above!",
+    //     "completed": false
+    // }
+//];
 
+console.log(todos);
 renderTodos(todos);
 localStorage.setItem("todos", JSON.stringify(todos));
 
 function renderTodos(array) {
-    array.forEach(todo => {
-        const li = document.createElement("li");
-        const span = document.createElement("span");
-        const checkbox = document.createElement("img");
-        const text = document.createElement("p");
-        const deleteButton = document.createElement("span");
-        let checked = todo.completed === false ? "unchecked" : "checked";
-        let completed = todo.completed === true ? "completed" : "";
+     array.forEach(todo => {
+         todo.rendered = false;
+        todo.render = function() {
+            if (todo.rendered === false ) {
+                todo.li = document.createElement("li");
+                document.getElementsByClassName("checklist")[0].appendChild(todo.li);
+                
+                todo.span = document.createElement("span");
+                todo.li.appendChild(todo.span);
+                
+                todo.checkbox = document.createElement("img");
+                todo.checkbox.src = "images/icon-check.svg";
+                todo.span.appendChild(todo.checkbox);
+                
+                todo.text = document.createElement("p");
+                todo.text.innerHTML = todo.content;
+                todo.text.setAttribute("contenteditable", true);
+                todo.li.appendChild(todo.text);
+                
+                todo.deleteButton = document.createElement("span");
+                todo.deleteButton.classList = "checklist__item--delete";
+                todo.li.appendChild(todo.deleteButton);
+        
+                todo.rendered = true;
+            }
 
-        span.classList = "checkbox " + checked;
-        checkbox.src = "images/icon-check.svg";
-        span.appendChild(checkbox);
-        text.innerHTML = todo.content;
-        text.setAttribute("contenteditable", true);
-        deleteButton.classList = "checklist__item--delete";
-        li.appendChild(span);
-        li.appendChild(text);
-        li.appendChild(deleteButton);
-        li.className = "checklist__item " + completed;
-        document.getElementsByClassName("checklist")[0].appendChild(li);
-   })
+            todo.span.addEventListener('click', this);
+    
+            todo.checkedClass = (todo.completed === false) ? "unchecked" : "checked";
+            todo.completeClass = (todo.completed === true) ? "completed" : "";
+    
+            todo.span.classList = "checkbox " + todo.checkedClass;
+            todo.li.className = "checklist__item " + todo.completeClass; 
+        }
+
+        todo.handleEvent = function(event) {
+            if (event.type === 'click') {
+                this.completed = (this.completed === true) ? false : true;
+                this.render();
+                //store new data
+                JSON.parse(localStorage.getItem('todos'));
+                let index = todos.indexOf(this);
+                todos.splice(index, 1);
+                todos.splice(index, 0, this);
+                localStorage.setItem("todos", JSON.stringify(todos)); 
+                JSON.parse(localStorage.getItem('todos'));       
+            }
+        }
+        
+        todo.render();
+        })
 }
+    
+    
+//         todo.li = document.createElement("li");
+//         document.getElementsByClassName("checklist")[0].appendChild(todo.li);
+    
+//         todo.span = document.createElement("span");
+//         todo.li.appendChild(todo.span);
+    
+//         todo.checkbox = document.createElement("img");
+//         todo.checkbox.src = "images/icon-check.svg";
+//         todo.span.appendChild(todo.checkbox);
+    
+//         todo.text = document.createElement("p");
+//         todo.text.innerHTML = todo.content;
+//         todo.text.setAttribute("contenteditable", true);
+//         todo.li.appendChild(todo.text);
+    
+//         todo.deleteButton = document.createElement("span");
+//         todo.deleteButton.classList = "checklist__item--delete";
+//         todo.li.appendChild(todo.deleteButton);
+
+//         todo.span.addEventListener('click', function() {{
+//             this.completed = (this.completed === true) ? false : true;
+//             this.render();
+//         };
+
+//         todo.checkedClass = (todo.completed === false) ? "unchecked" : "checked";
+//         todo.completeClass = (todo.completed === true) ? "completed" : "";
+
+//         todo.span.classList = "checkbox " + todo.checkedClass;
+//         todo.li.className = "checklist__item " + todo.completeClass; 
+//    }
+//    )
+// }
+// )
+// }
 
 // Toggle dark mode
 function setTheme(themeName) {
@@ -81,27 +149,27 @@ function addTodo(inputValue){
     if (inputValue.length === 0) return;
     let newTodo = new Todo(inputValue);
     newTodo.render();
+    console.log(newTodo.render);
     JSON.parse(localStorage.getItem('todos'));
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
     //addListeners();
-    updateItemsRemaining();
+    //updateItemsRemaining();
     input.value = "";
 }
 
 function Todo(content) {
     this.content = content;
     this.completed = false;
-    let rendered = false;
+    this.rendered = false;
 
     this.render = function() {
-        if (rendered === false) {
+        if (this.rendered === false) {
             this.li = document.createElement("li");
             document.getElementsByClassName("checklist")[0].appendChild(this.li);
         
             this.span = document.createElement("span");
             this.li.appendChild(this.span);
-            this.span.addEventListener('click', this, false);
         
             this.checkbox = document.createElement("img");
             this.checkbox.src = "images/icon-check.svg";
@@ -116,22 +184,30 @@ function Todo(content) {
             this.deleteButton.classList = "checklist__item--delete";
             this.li.appendChild(this.deleteButton);
 
-            rendered = true;
+            this.rendered = true;
         }
 
-        let checked = (this.completed === false) ? "unchecked" : "checked";
-        this.span.classList = "checkbox " + checked;
+        this.span.addEventListener('click', this);
 
-        let completed = (this.completed === true) ? "completed" : "";
-        this.li.className = "checklist__item " + completed;  
+        this.checkedClass = (this.completed === false) ? "unchecked" : "checked";
+        this.completeClass = (this.completed === true) ? "completed" : "";
+
+        this.span.classList = "checkbox " + this.checkedClass;
+        this.li.className = "checklist__item " + this.completeClass;  
     }
 }
-
 
 Todo.prototype.handleEvent = function(event) {
     if (event.type === 'click') {
         this.completed = (this.completed === true) ? false : true;
         this.render();
+        //store new data
+        JSON.parse(localStorage.getItem('todos'));
+        let index = todos.indexOf(this);
+        todos.splice(index, 1);
+        todos.splice(index, 0, this);
+        localStorage.setItem("todos", JSON.stringify(todos)); 
+        JSON.parse(localStorage.getItem('todos'));       
     }
 }
 
@@ -183,58 +259,59 @@ Todo.prototype.handleEvent = function(event) {
 
 
 // Filter List
-function filterList() {
-    let filterButtons = document.getElementsByClassName("toggle-states__state");
-    for(let button of filterButtons) {
-        button.classList.remove("active");
-    }
-    this.classList.add("active");
+// function filterList() {
+//     let filterButtons = document.getElementsByClassName("toggle-states__state");
+//     for(let button of filterButtons) {
+//         button.classList.remove("active");
+//     }
+//     this.classList.add("active");
     
 
-    let checklistItems = Array.from(document.getElementsByClassName("checklist__item"));
-    if (this.innerHTML === "Active") {
-        checklistItems.forEach(item => {
-            item.style.display = (item.classList.contains("completed")) ? "none" : "flex";
-        })
-    }
-    else if (this.innerHTML === "Completed") {
-        checklistItems.forEach(item => {
-            item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
-        })
-    }
-    else {
-        for(let item of checklistItems)
-           item.style.display = "flex";
-    }
-}
+//     let checklistItems = Array.from(document.getElementsByClassName("checklist__item"));
+//     if (this.innerHTML === "Active") {
+//         checklistItems.forEach(item => {
+//             item.style.display = (item.classList.contains("completed")) ? "none" : "flex";
+//         })
+//     }
+//     else if (this.innerHTML === "Completed") {
+//         checklistItems.forEach(item => {
+//             item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
+//         })
+//     }
+//     else {
+//         for(let item of checklistItems)
+//            item.style.display = "flex";
+//     }
+// }
 
 
 // Clear completed items
-let clearCompletedButton = document.getElementsByClassName("clear-completed")[0];
-clearCompletedButton.addEventListener('click', clearCompleted);
+// let clearCompletedButton = document.getElementsByClassName("clear-completed")[0];
+// clearCompletedButton.addEventListener('click', clearCompleted);
 
-function clearCompleted() {
-    let completedItems = document.getElementsByClassName("completed");
-    Array.from(completedItems).forEach(item => item.remove());
-}
+// function clearCompleted() {
+//     let completedItems = document.getElementsByClassName("completed");
+//     Array.from(completedItems).forEach(item => item.remove());
+// }
 
 
 // Determine number of items left
-function updateItemsRemaining() {
-    let items = Array.from(document.getElementsByClassName("checklist__item"));
-    let numberOfItems = items.filter(item => item.classList.contains("completed") === false).length;
+// function updateItemsRemaining() {
+//     let items = Array.from(document.getElementsByClassName("checklist__item"));
+//     let numberOfItems = items.filter(item => item.classList.contains("completed") === false).length;
 
-    let itemsDisplay = document.getElementsByClassName("items-left__number")[0];
-    itemsDisplay.innerHTML = numberOfItems;
+//     let itemsDisplay = document.getElementsByClassName("items-left__number")[0];
+//     itemsDisplay.innerHTML = numberOfItems;
 
-    let itemsDescription = document.getElementsByClassName("items-left__description")[0];
-    itemsDescription.innerHTML = numberOfItems === 1 ? "item left" : "items left";
-}
+//     let itemsDescription = document.getElementsByClassName("items-left__description")[0];
+//     itemsDescription.innerHTML = numberOfItems === 1 ? "item left" : "items left";
+// }
 
-updateItemsRemaining();
+// updateItemsRemaining();
 
 // Make items sortable
-let el = document.getElementsByClassName('checklist')[0];
-let sortable = Sortable.create(el, {
-    ghostClass: "ghost-class"
-});
+// let el = document.getElementsByClassName('checklist')[0];
+// let sortable = Sortable.create(el, {
+//     ghostClass: "ghost-class"
+//     }
+// )
