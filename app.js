@@ -39,9 +39,6 @@ function toggleTheme() {
     test ? setSunAndMoon('moon') : setSunAndMoon('sun');
 }
 
-
-
-
 // Add todo list object and render it in the DOM   
 const input = document.querySelector("#new-todo");
 const submitButton = document.querySelector('.input__submit');
@@ -183,52 +180,27 @@ function filterList() {
     )
 }
 
-
-// function deleteItem() {
-//     this.parentElement.remove();
-//     updateItemsRemaining();
-// }
-
-
-    // //prevents you from adding class to img tag
-    // let classes = (this.tagName === "SPAN") ? this.classList : this.parentElement.classList;
-    // if(classes.contains("unchecked")){
-    //     classes.add("checked");
-    //     classes.remove("unchecked");
-    // }
-    // else {
-    //     classes.add("unchecked");
-    //     classes.remove("checked");
-    // }
-
-    // let parent = (this.tagName === "SPAN") ? this.parentElement : this.parentElement.parentElement;
-    // parent.classList.toggle("completed");
-    // updateItemsRemaining();
-
-
-
-
-
 // Clear completed items
-// let clearCompletedButton = document.getElementsByClassName("clear-completed")[0];
-// clearCompletedButton.addEventListener('click', clearCompleted);
 
-// function clearCompleted() {
-//     let completedItems = document.getElementsByClassName("completed");
-//     Array.from(completedItems).forEach(item => item.remove());
-// }
+const clearCompletedButton = document.querySelector(".clear-completed");
+clearCompletedButton.addEventListener('click', clearCompleted);
 
-
-
-
-
-
-
-// updateItemsRemaining();
+function clearCompleted() {
+    for(let todo of todos) {
+        if (todo.completed === true){
+            getTodosFromStorage;
+            let index = todos.indexOf(todo);
+            todos.splice(index, 1);
+            todo.li.remove();
+            localStorage.setItem("todos", JSON.stringify(todos));
+            displayItemsRemaining();
+        }
+    } 
+}
 
 // Make items sortable
-// let el = document.getElementsByClassName('checklist')[0];
-// let sortable = Sortable.create(el, {
-//     ghostClass: "ghost-class"
-//     }
-// )
+let el = document.getElementsByClassName('checklist')[0];
+let sortable = Sortable.create(el, {
+    ghostClass: "ghost-class"
+    }
+)
