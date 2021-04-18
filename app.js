@@ -2,6 +2,7 @@
 const getTodosFromStorage = JSON.parse(localStorage.getItem("todos"));
 const todos = getTodosFromStorage || [];
 displayItemsRemaining();
+addFilterEventListeners();
 
 // Toggle dark mode on page load
 localStorage.getItem('theme') === 'dark-mode' ? setTheme('dark-mode') : setTheme('light-mode');
@@ -149,13 +150,38 @@ function displayItemsRemaining() {
 
 
 // Filter items
+function addFilterEventListeners() {
+    const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
+    for(let filter of filters){
+        filter.addEventListener('click', filterList);
+    }
+}
 
+function highlightFilterLabel(clickedElement) {
+    const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
+    let activeFilter = this.innerHTML;
+    for(let filter of filters) {
+        filter.classList.remove("active");
+        if(filter.innerHTML === activeFilter){ 
+            filter.classList.add('active');
+        }
+    }
+}
 
-
-
-// const filters = document.querySelectorAll("toggle-states__state");
-// for(let filter of filters)
-//     filter.addEventListener('click', filterList);
+function filterList() {
+    highlightFilterLabel(this);
+    let checklistItems = Array.from(document.querySelectorAll(".checklist__item"));
+    checklistItems.forEach(item => {
+        if (this.innerHTML === "Active") {
+            return item.style.display = (item.classList.contains("completed")) ? "none" : "flex";  
+        }
+        if (this.innerHTML === "Completed") {
+            return item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
+        } 
+        else item.style.display = "flex";
+        }
+    )
+}
 
 
 // function deleteItem() {
@@ -180,31 +206,7 @@ function displayItemsRemaining() {
     // updateItemsRemaining();
 
 
-// Filter List
-// function filterList() {
-//     let filterButtons = document.getElementsByClassName("toggle-states__state");
-//     for(let button of filterButtons) {
-//         button.classList.remove("active");
-//     }
-//     this.classList.add("active");
-    
 
-//     let checklistItems = Array.from(document.getElementsByClassName("checklist__item"));
-//     if (this.innerHTML === "Active") {
-//         checklistItems.forEach(item => {
-//             item.style.display = (item.classList.contains("completed")) ? "none" : "flex";
-//         })
-//     }
-//     else if (this.innerHTML === "Completed") {
-//         checklistItems.forEach(item => {
-//             item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
-//         })
-//     }
-//     else {
-//         for(let item of checklistItems)
-//            item.style.display = "flex";
-//     }
-// }
 
 
 // Clear completed items
