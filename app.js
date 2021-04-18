@@ -1,86 +1,24 @@
 // Render todos saved in local storage on page load
-let todos = JSON.parse(localStorage.getItem("todos")) || [];
-//|| [ 
-    // {
-    //     "content": "Toggle between light and dark mode",
-    //     "completed": false
-    // },
-    // {
-    //     "content": "Add your first item in the text box above!",
-    //     "completed": false
-    // }
-//];
+const getTodosFromStorage = JSON.parse(localStorage.getItem("todos"));
+const todos = getTodosFromStorage || [];
+displayItemsRemaining();
+
+// Toggle dark mode on page load
+localStorage.getItem('theme') === 'dark-mode' ? setTheme('dark-mode') : setTheme('light-mode');
+
+// Store todos array
+localStorage.setItem("todos", JSON.stringify(todos));
 
 
 renderTodos(todos);
-localStorage.setItem("todos", JSON.stringify(todos));
-
 function renderTodos(array) {
      array.forEach(todo => {
-        todo.rendered = false;
-        //add render function to todos on page load so they can change with click functions.
-        todo.render = function() {
-            if (todo.rendered === false ) {
-                todo.li = document.createElement("li");
-                document.getElementsByClassName("checklist")[0].appendChild(todo.li);
-                
-                todo.span = document.createElement("span");
-                todo.li.appendChild(todo.span);
-                
-                todo.checkbox = document.createElement("img");
-                todo.checkbox.src = "images/icon-check.svg";
-                todo.span.appendChild(todo.checkbox);
-                
-                todo.text = document.createElement("p");
-                todo.text.innerHTML = todo.content;
-                todo.text.setAttribute("contenteditable", true);
-                todo.li.appendChild(todo.text);
-                
-                todo.deleteButton = document.createElement("span");
-                todo.deleteButton.classList = "checklist__item--delete";
-                todo.li.appendChild(todo.deleteButton);
-        
-                todo.rendered = true;
-            }
-
-            todo.span.addEventListener('click', this);
-            todo.deleteButton.addEventListener('click', this);
-
-            todo.checkedClass = (todo.completed === false) ? "unchecked" : "checked";
-            todo.completeClass = (todo.completed === true) ? "completed" : "";
-    
-            todo.span.classList = "checkbox " + todo.checkedClass;
-            todo.li.className = "checklist__item " + todo.completeClass; 
-        }
-
-        todo.handleEvent = function(event) {
-            if (event.target.classList.contains('checkbox')) {
-                this.completed = (this.completed === true) ? false : true;
-                this.render();
-                //store new data
-                JSON.parse(localStorage.getItem('todos'));
-                let index = todos.indexOf(this);
-                todos.splice(index, 1);
-                todos.splice(index, 0, this);
-                localStorage.setItem("todos", JSON.stringify(todos)); 
-                JSON.parse(localStorage.getItem('todos'));       
-            }
-            if (event.target.classList.contains('checklist__item--delete')){
-                event.target.parentElement.remove();
-                //remove from local storage
-                JSON.parse(localStorage.getItem('todos'));
-                let index = todos.indexOf(this);
-                todos.splice(index, 1);
-                localStorage.setItem("todos", JSON.stringify(todos)); 
-            }
-        }
-
-        todo.render();
+         todo = new Todo(todo.content, todo.completed);
+         todo.render();
     })
 }
 
-
-// Toggle dark mode
+// Dark mode functionality
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
@@ -100,14 +38,12 @@ function toggleTheme() {
     test ? setSunAndMoon('moon') : setSunAndMoon('sun');
 }
 
-(function () {
-    localStorage.getItem('theme') === 'dark-mode' ? setTheme('dark-mode') : setTheme('light-mode');
-})();
+
 
 
 // Add todo list object and render it in the DOM   
-const input = document.getElementById("new-todo");
-const submitButton = document.getElementsByClassName('input__submit')[0];
+const input = document.querySelector("#new-todo");
+const submitButton = document.querySelector('.input__submit');
 
 input.addEventListener("keyup", function(event) {
     if(event.key !== "Enter") return;
@@ -124,23 +60,22 @@ function addTodo(inputValue){
     if (inputValue.length === 0) return;
     let newTodo = new Todo(inputValue);
     newTodo.render();
-    JSON.parse(localStorage.getItem('todos'));
+    getTodosFromStorage;
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
-    //addListeners();
-    //updateItemsRemaining();
+    displayItemsRemaining();
     input.value = "";
 }
 
-function Todo(content) {
+function Todo(content, completed = false) {
     this.content = content;
-    this.completed = false;
+    this.completed = completed;
     this.rendered = false;
 
     this.render = function() {
         if (this.rendered === false) {
             this.li = document.createElement("li");
-            document.getElementsByClassName("checklist")[0].appendChild(this.li);
+            document.querySelector(".checklist").appendChild(this.li);
         
             this.span = document.createElement("span");
             this.li.appendChild(this.span);
@@ -170,48 +105,58 @@ function Todo(content) {
         this.span.classList = "checkbox " + this.checkedClass;
         this.li.className = "checklist__item " + this.completeClass;  
     }
+
+    this.handleEvent = function(event) {
+        if (event.target.classList.contains('checkbox')) {
+            this.completed = (this.completed === true) ? false : true;
+            this.render();
+            displayItemsRemaining();
+            // store new data
+            getTodosFromStorage;
+            const index = todos.indexOf(this);
+            todos.splice(index, 0, this);
+            todos.splice(index, 1);
+            localStorage.setItem("todos", JSON.stringify(todos));    
+        }
+
+        if (event.target.classList.contains('checklist__item--delete')){
+            event.target.parentElement.remove();
+            //remove from local storage
+            getTodosFromStorage;
+            let index = todos.indexOf(this);
+            todos.splice(index, 1);
+            localStorage.setItem("todos", JSON.stringify(todos)); 
+            displayItemsRemaining();
+        }
+    }
 }
 
-Todo.prototype.handleEvent = function(event) {
-    if (event.target.classList.contains('checkbox')) {
-        this.completed = (this.completed === true) ? false : true;
-        this.render();
-        //store new data
-        JSON.parse(localStorage.getItem('todos'));
-        let index = todos.indexOf(this);
-        todos.splice(index, 1);
-        todos.splice(index, 0, this);
-        localStorage.setItem("todos", JSON.stringify(todos)); 
-        JSON.parse(localStorage.getItem('todos'));       
-    }
-    if (event.target.classList.contains('checklist__item--delete')){
-        event.target.parentElement.remove();
-        //remove from local storage
-        JSON.parse(localStorage.getItem('todos'));
-        let index = todos.indexOf(this);
-        todos.splice(index, 1);
-        localStorage.setItem("todos", JSON.stringify(todos)); 
-    }
+// Update and display items remaining
+function updateItemsRemaining() {
+    getTodosFromStorage;
+    return todos.filter(item => item.completed === false).length;
+}
+
+function displayItemsRemaining() {
+    const itemsRemaining = updateItemsRemaining();
+
+    let itemsDisplay = document.querySelector(".items-left__number");
+    itemsDisplay.innerHTML = itemsRemaining;
+
+    let itemsDescription = document.querySelector(".items-left__description");
+    itemsDescription.innerHTML = itemsRemaining === 1 ? "item left" : "items left";
 }
 
 
-//Todo.addEventListener('click', console.log(this));
-// Add checked and delete listeners
-// addListeners();
-// function addListeners() {
-//     let checkboxes = document.getElementsByClassName("checkbox");
-//     for(let checkbox of checkboxes) {
-//         checkbox.addEventListener('click', toggleCheckbox);
-//     }
+// Filter items
 
-//     let deleteButtons = document.getElementsByClassName("checklist__item--delete");
-//     for(let button of deleteButtons)
-//         button.addEventListener("click", deleteItem);
 
-//     let filters = document.getElementsByClassName("toggle-states__state");
-//     for(let filter of filters)
-//         filter.addEventListener('click', filterList);
-// }
+
+
+// const filters = document.querySelectorAll("toggle-states__state");
+// for(let filter of filters)
+//     filter.addEventListener('click', filterList);
+
 
 // function deleteItem() {
 //     this.parentElement.remove();
@@ -272,17 +217,10 @@ Todo.prototype.handleEvent = function(event) {
 // }
 
 
-// Determine number of items left
-// function updateItemsRemaining() {
-//     let items = Array.from(document.getElementsByClassName("checklist__item"));
-//     let numberOfItems = items.filter(item => item.classList.contains("completed") === false).length;
 
-//     let itemsDisplay = document.getElementsByClassName("items-left__number")[0];
-//     itemsDisplay.innerHTML = numberOfItems;
 
-//     let itemsDescription = document.getElementsByClassName("items-left__description")[0];
-//     itemsDescription.innerHTML = numberOfItems === 1 ? "item left" : "items left";
-// }
+
+
 
 // updateItemsRemaining();
 
