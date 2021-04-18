@@ -204,3 +204,5 @@ let sortable = Sortable.create(el, {
     ghostClass: "ghost-class"
     }
 )
+
+//TODO: add 'no todos to display' message when there are none'

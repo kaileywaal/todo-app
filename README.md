@@ -18,12 +18,94 @@ Users should be able to:
 
 ### Built with
 
-- Vanilla JavaScript
+- Object Oriented Vanilla JavaScript
 - Semantic HTML5 markup
 - CSS custom properties
 - Flexbox
 - Mobile-first workflow
+- Local Storage
 - [SortableJS](https://github.com/SortableJS/Sortable) - Sortable library for drag and drop functionality
+
+### What I learned
+
+With my first implementation of the app there was no way to store any of the essential data associated with each todo item. This meant that when the page was refreshed, it reverted back to it's initial state.
+
+To remedy this, I needed to implement some sort of local backend. This required me to learn two main things:
+
+1. How to add and retrieve items from local storage.
+2. How to manipulate rendered objects.
+
+The first was pretty simple, but the second proved to be a bit more of a challenge. It required a complete overhaul of my initial code. Rather than targeting the rendered elements, I needed to target the object behind those and manipulate its properties. Then I needed to adjust the styles accordingly.
+
+The below code shows how I achieved this.
+
+```js
+function Todo(content, completed = false) {
+  this.content = content;
+  this.completed = completed;
+  this.rendered = false;
+
+  this.render = function () {
+    if (this.rendered === false) {
+      this.li = document.createElement("li");
+      document.querySelector(".checklist").appendChild(this.li);
+
+      this.span = document.createElement("span");
+      this.li.appendChild(this.span);
+
+      this.checkbox = document.createElement("img");
+      this.checkbox.src = "images/icon-check.svg";
+      this.span.appendChild(this.checkbox);
+
+      this.text = document.createElement("p");
+      this.text.innerHTML = this.content;
+      this.text.setAttribute("contenteditable", true);
+      this.li.appendChild(this.text);
+
+      this.deleteButton = document.createElement("span");
+      this.deleteButton.classList = "checklist__item--delete";
+      this.li.appendChild(this.deleteButton);
+
+      this.rendered = true;
+    }
+
+    this.span.addEventListener("click", this);
+    this.deleteButton.addEventListener("click", this);
+
+    this.checkedClass = this.completed === false ? "unchecked" : "checked";
+    this.completeClass = this.completed === true ? "completed" : "";
+
+    this.span.classList = "checkbox " + this.checkedClass;
+    this.li.className = "checklist__item " + this.completeClass;
+  };
+
+  this.handleEvent = function (event) {
+    if (event.target.classList.contains("checkbox")) {
+      this.completed = this.completed === true ? false : true;
+      this.render();
+      displayItemsRemaining();
+      // store new data
+      getTodosFromStorage;
+      const index = todos.indexOf(this);
+      todos.splice(index, 0, this);
+      todos.splice(index, 1);
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
+
+    if (event.target.classList.contains("checklist__item--delete")) {
+      event.target.parentElement.remove();
+      //remove from local storage
+      getTodosFromStorage;
+      let index = todos.indexOf(this);
+      todos.splice(index, 1);
+      localStorage.setItem("todos", JSON.stringify(todos));
+      displayItemsRemaining();
+    }
+  };
+}
+```
+
+This object constructor function does several things at once. It defines a few essential properties (namely, the todo content and whether it is completed). It also renders the object to the DOM based on these properties. Finally, it creates event listeners and event handlers that allow events to target the object itself rather than targeting the rendered element.
 
 ### Useful resources
 
