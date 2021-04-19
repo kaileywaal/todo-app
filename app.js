@@ -155,8 +155,9 @@ function addFilterEventListeners() {
 }
 
 function highlightFilterLabel(clickedElement) {
+    console.log(clickedElement);
     const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
-    let activeFilter = this.innerHTML;
+    let activeFilter = clickedElement.innerHTML;
     for(let filter of filters) {
         filter.classList.remove("active");
         if(filter.innerHTML === activeFilter){ 
