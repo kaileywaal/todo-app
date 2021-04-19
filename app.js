@@ -2,6 +2,7 @@
 const getTodosFromStorage = JSON.parse(localStorage.getItem("todos"));
 const todos = getTodosFromStorage || [];
 displayItemsRemaining();
+displayNoTodosMessage();
 addFilterEventListeners();
 
 // Toggle dark mode on page load
@@ -62,6 +63,7 @@ function addTodo(inputValue){
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
     displayItemsRemaining();
+    displayNoTodosMessage();
     input.value = "";
 }
 
@@ -108,13 +110,13 @@ function Todo(content, completed = false) {
         if (event.target.classList.contains('checkbox')) {
             this.completed = (this.completed === true) ? false : true;
             this.render();
-            displayItemsRemaining();
             // store new data
             getTodosFromStorage;
             const index = todos.indexOf(this);
             todos.splice(index, 0, this);
             todos.splice(index, 1);
-            localStorage.setItem("todos", JSON.stringify(todos));    
+            localStorage.setItem("todos", JSON.stringify(todos)); 
+            displayItemsRemaining();   
         }
 
         if (event.target.classList.contains('checklist__item--delete')){
@@ -125,6 +127,7 @@ function Todo(content, completed = false) {
             todos.splice(index, 1);
             localStorage.setItem("todos", JSON.stringify(todos)); 
             displayItemsRemaining();
+            displayNoTodosMessage();
         }
     }
 }
@@ -195,6 +198,7 @@ function clearCompleted() {
             todo.li.remove();
             localStorage.setItem("todos", JSON.stringify(todos));
             displayItemsRemaining();
+            displayNoTodosMessage();
         }
     } 
 }
@@ -206,4 +210,32 @@ let sortable = Sortable.create(el, {
     }
 )
 
-//TODO: add 'no todos to display' message when there are none'
+//Add 'no todos to display' message when there are none
+function checkForNoTodos() {
+    const checklistItems = document.querySelectorAll('.checklist__item');
+    return checklistItems.length === 0
+}
+
+function displayNoTodosMessage() {
+    checkForNoTodos() ? addNoTodosMessage() : removeNoTodosMessage();
+}
+
+function addNoTodosMessage() {
+    const li = document.createElement("li");
+    li.classList = "checklist__item";
+    document.querySelector(".checklist").appendChild(li);
+    li.innerHTML = "You have nothing left to do!"
+}
+
+function removeNoTodosMessage(){
+    const checklistItems = Array.from(document.querySelectorAll('.checklist__item'));
+    for(item of checklistItems) {
+        if (item.innerHTML === "You have nothing left to do!"){
+            item.remove();
+        }
+    }
+}
+
+//TODO: add 'no completed todos to display' message
+//TODO: add animations 
+//TODO: add intro todos
