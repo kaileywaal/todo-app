@@ -1,8 +1,8 @@
 // Render todos saved in local storage on page load
 const getTodosFromStorage = JSON.parse(localStorage.getItem("todos"));
 const todos = getTodosFromStorage || [];
+const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
 displayItemsRemaining();
-displayNoTodosMessage();
 addFilterEventListeners();
 
 // Toggle dark mode on page load
@@ -20,6 +20,7 @@ function renderTodos(array) {
     })
 }
 
+checkForNoTodos();
 // Dark mode functionality
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
@@ -62,9 +63,16 @@ function addTodo(inputValue){
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
     displayItemsRemaining();
-    displayNoTodosMessage();
     input.value = "";
+    displayAllTodos();
     //TODO: add function to see all todos when adding one
+}
+
+function displayAllTodos(){
+    let activeFilter = filters.find(filter => filter.innerHTML = 'All');
+    highlightFilterLabel(activeFilter);
+    let checklistItems = Array.from(document.querySelectorAll(".checklist__item"));
+    checklistItems.forEach(item => { item.style.display = 'flex' });
 }
 
 function Todo(content, completed = false) {
@@ -127,7 +135,6 @@ function Todo(content, completed = false) {
             todos.splice(index, 1);
             localStorage.setItem("todos", JSON.stringify(todos)); 
             displayItemsRemaining();
-            displayNoTodosMessage();
         }
     }
 }
@@ -151,14 +158,12 @@ function displayItemsRemaining() {
 
 // Filter items
 function addFilterEventListeners() {
-    const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
     for(let filter of filters){
         filter.addEventListener('click', filterList);
     }
 }
 
 function highlightFilterLabel(element) {
-    const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
     let activeFilter = element.innerHTML;
     for(let filter of filters) {
         filter.classList.remove("active");
@@ -181,7 +186,6 @@ function filterList() {
         else item.style.display = "flex";
         }
     )
-    displayNoCompletedTodosMessage();
 }
 
 // Clear completed items
@@ -197,7 +201,6 @@ function clearCompleted() {
             todo.li.remove();
             localStorage.setItem("todos", JSON.stringify(todos));
             displayItemsRemaining();
-            displayNoTodosMessage();
         }
     } 
 }
@@ -210,50 +213,47 @@ let sortable = Sortable.create(el, {
 )
 
 //Add 'no todos to display' message when there are none
+document.addEventListener('click', checkForNoTodos);
+
 function checkForNoTodos() {
+    removeNoTodosMessages();
     const checklistItems = document.querySelectorAll('.checklist__item');
-    return checklistItems.length === 0
+    const activeFilter = filters.find(filter => filter.classList.contains('active')).innerHTML;
+    const noTodosMessage = 'You have nothing left to do!';
+    const noActiveTodosMessage = 'You have no active todos to display.';
+    const noCompletedTodosMessage = 'You have no completed todos to display';
+    
+        if (activeFilter === "All" && checklistItems.length === 0) {
+            addNoTodosMessage(noTodosMessage);
+        }
+
+        const activeTodos = todos.filter(todo => todo.completed === false);
+        if (activeFilter === "Active" && activeTodos.length === 0) {
+            addNoTodosMessage(noActiveTodosMessage);
+        }
+
+        const completedTodos = todos.filter(todo => todo.completed === true);
+        if (activeFilter === "Completed" && completedTodos.length === 0) {
+            addNoTodosMessage(noCompletedTodosMessage);
+        }
 }
 
-function displayNoTodosMessage() {
-    const message = 'You have nothing left to do!'
-    checkForNoTodos() ? addNoTodosMessage(message) : removeNoTodosMessage(message);
-}
 
 function addNoTodosMessage(message) {
     const li = document.createElement("li");
-    li.classList = "checklist__item";
+    li.classList = "no-todos-message";
     document.querySelector(".checklist").appendChild(li);
     li.innerHTML = message
 }
 
-function removeNoTodosMessage(message){
-    const checklistItems = Array.from(document.querySelectorAll('.checklist__item'));
-    for(let item of checklistItems) {
-        if (item.innerHTML === message){
-            item.remove();
-        }
-    }
+function removeNoTodosMessages(){
+    const renderedNoTodosMessages = Array.from(document.querySelectorAll('.no-todos-message'));
+    renderedNoTodosMessages.map(message => message.remove());
 }
 
-//add 'no completed todos to display' message
-function displayNoCompletedTodosMessage(){
-    const states = document.querySelectorAll('.toggle-states__state');
-    const message = 'You have no completed todos to display.';
-    let completedTodosActive = false;
-    states.forEach(state => {
-        if (state.innerHTML === "Completed" && state.classList.contains('active')) {
-            completedTodosActive = true;
-        }
-    })
-    if (completedTodosActive) {
-        getTodosFromStorage;
-        const completedTodos = todos.filter(todo => todo.completed === true);
-        if (completedTodos.length === 0) addNoTodosMessage(message); 
-    }
-    else removeNoTodosMessage(message);
-}
 
 
 //TODO: add animations 
 //TODO: add intro todos
+//TODO: adjust css styling of first todo in javascript
+//TODO: fix clear completed

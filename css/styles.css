@@ -130,7 +130,8 @@ h1 {
   background-color: var(--color-list);
 }
 
-.checklist__item {
+.checklist__item,
+.no-todos-message {
   list-style: none;
   padding: 2rem;
   display: flex;
