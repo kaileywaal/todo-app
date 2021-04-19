@@ -257,7 +257,8 @@ input::placeholder {
   cursor: pointer;
 }
 
-.active {
+.active,
+.active:hover {
   color: var(--color-active);
 }
 
