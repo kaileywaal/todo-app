@@ -35,7 +35,6 @@ function setSunAndMoon(sunOrMoon){
 
 function toggleTheme() {
     const test = localStorage.getItem('theme') === 'dark-mode';
-
     test ? setTheme('light-mode') : setTheme('dark-mode');
     test ? setSunAndMoon('moon') : setSunAndMoon('sun');
 }
@@ -65,6 +64,7 @@ function addTodo(inputValue){
     displayItemsRemaining();
     displayNoTodosMessage();
     input.value = "";
+    //TODO: add function to see all todos when adding one
 }
 
 function Todo(content, completed = false) {
@@ -157,10 +157,9 @@ function addFilterEventListeners() {
     }
 }
 
-function highlightFilterLabel(clickedElement) {
-    console.log(clickedElement);
+function highlightFilterLabel(element) {
     const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
-    let activeFilter = clickedElement.innerHTML;
+    let activeFilter = element.innerHTML;
     for(let filter of filters) {
         filter.classList.remove("active");
         if(filter.innerHTML === activeFilter){ 
@@ -182,10 +181,10 @@ function filterList() {
         else item.style.display = "flex";
         }
     )
+    displayNoCompletedTodosMessage();
 }
 
 // Clear completed items
-
 const clearCompletedButton = document.querySelector(".clear-completed");
 clearCompletedButton.addEventListener('click', clearCompleted);
 
@@ -217,25 +216,44 @@ function checkForNoTodos() {
 }
 
 function displayNoTodosMessage() {
-    checkForNoTodos() ? addNoTodosMessage() : removeNoTodosMessage();
+    const message = 'You have nothing left to do!'
+    checkForNoTodos() ? addNoTodosMessage(message) : removeNoTodosMessage(message);
 }
 
-function addNoTodosMessage() {
+function addNoTodosMessage(message) {
     const li = document.createElement("li");
     li.classList = "checklist__item";
     document.querySelector(".checklist").appendChild(li);
-    li.innerHTML = "You have nothing left to do!"
+    li.innerHTML = message
 }
 
-function removeNoTodosMessage(){
+function removeNoTodosMessage(message){
     const checklistItems = Array.from(document.querySelectorAll('.checklist__item'));
-    for(item of checklistItems) {
-        if (item.innerHTML === "You have nothing left to do!"){
+    for(let item of checklistItems) {
+        if (item.innerHTML === message){
             item.remove();
         }
     }
 }
 
-//TODO: add 'no completed todos to display' message
+//add 'no completed todos to display' message
+function displayNoCompletedTodosMessage(){
+    const states = document.querySelectorAll('.toggle-states__state');
+    const message = 'You have no completed todos to display.';
+    let completedTodosActive = false;
+    states.forEach(state => {
+        if (state.innerHTML === "Completed" && state.classList.contains('active')) {
+            completedTodosActive = true;
+        }
+    })
+    if (completedTodosActive) {
+        getTodosFromStorage;
+        const completedTodos = todos.filter(todo => todo.completed === true);
+        if (completedTodos.length === 0) addNoTodosMessage(message); 
+    }
+    else removeNoTodosMessage(message);
+}
+
+
 //TODO: add animations 
 //TODO: add intro todos
