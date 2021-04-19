@@ -67,7 +67,7 @@ function addTodo(inputValue){
 }
 
 function displayAllTodos(){
-    let activeFilter = filters.find(filter => filter.innerHTML = 'All');
+    let activeFilter = filters.find(filter => filter.innerHTML = 'All').innerHTML;
     highlightFilterLabel(activeFilter);
     let checklistItems = Array.from(document.querySelectorAll(".checklist__item"));
     checklistItems.forEach(item => { item.style.display = 'flex' });
@@ -161,12 +161,17 @@ document.addEventListener('keypress', filterList);
 
 function addFilterEventListeners() {
     for(let filter of filters){
-        filter.addEventListener('click', highlightFilterLabel);
+        filter.addEventListener('click', highlightFilterLabelOnClick);
     }
 }
 
-function highlightFilterLabel() {
-    let activeFilter = this.innerHTML;
+function highlightFilterLabelOnClick() {
+    let highlightArgument = this.innerHTML;
+    highlightFilterLabel(highlightArgument);
+}
+
+function highlightFilterLabel(element) {
+    let activeFilter = element;
     for(let filter of filters) {
         filter.classList.remove("active");
         if(filter.innerHTML === activeFilter){ 
@@ -244,6 +249,7 @@ function checkForNoTodos() {
 function addNoTodosMessage(message) {
     const li = document.createElement("li");
     li.classList = "no-todos-message";
+    li.style['border-radius'] = "0.5rem 0.5rem 0 0";
     document.querySelector(".checklist").appendChild(li);
     li.innerHTML = message
 }
