@@ -126,10 +126,6 @@ h1 {
   margin-bottom: 0;
 }
 
-.dark-mode .checklist {
-  background-color: var(--color-list);
-}
-
 .checklist__item,
 .no-todos-message {
   list-style: none;

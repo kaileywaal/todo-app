@@ -11,7 +11,6 @@ localStorage.getItem('theme') === 'dark-mode' ? setTheme('dark-mode') : setTheme
 // Store todos array
 localStorage.setItem("todos", JSON.stringify(todos));
 
-
 renderTodos(todos);
 function renderTodos(array) {
      array.forEach(todo => {
@@ -63,9 +62,8 @@ function addTodo(inputValue){
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
     displayItemsRemaining();
-    input.value = "";
     displayAllTodos();
-    //TODO: add function to see all todos when adding one
+    input.value = "";
 }
 
 function displayAllTodos(){
@@ -145,6 +143,7 @@ function updateItemsRemaining() {
     return todos.filter(item => item.completed === false).length;
 }
 
+document.addEventListener('click', displayItemsRemaining);
 function displayItemsRemaining() {
     const itemsRemaining = updateItemsRemaining();
 
@@ -157,14 +156,17 @@ function displayItemsRemaining() {
 
 
 // Filter items
+document.addEventListener('click', filterList);
+document.addEventListener('keypress', filterList);
+
 function addFilterEventListeners() {
     for(let filter of filters){
-        filter.addEventListener('click', filterList);
+        filter.addEventListener('click', highlightFilterLabel);
     }
 }
 
-function highlightFilterLabel(element) {
-    let activeFilter = element.innerHTML;
+function highlightFilterLabel() {
+    let activeFilter = this.innerHTML;
     for(let filter of filters) {
         filter.classList.remove("active");
         if(filter.innerHTML === activeFilter){ 
@@ -174,13 +176,13 @@ function highlightFilterLabel(element) {
 }
 
 function filterList() {
-    highlightFilterLabel(this);
+    let activeFilter = filters.find(filter => filter.classList.contains('active')).innerHTML;
     let checklistItems = Array.from(document.querySelectorAll(".checklist__item"));
     checklistItems.forEach(item => {
-        if (this.innerHTML === "Active") {
+        if (activeFilter === "Active") {
             return item.style.display = (item.classList.contains("completed")) ? "none" : "flex";  
         }
-        if (this.innerHTML === "Completed") {
+        if (activeFilter === "Completed") {
             return item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
         } 
         else item.style.display = "flex";
@@ -256,4 +258,3 @@ function removeNoTodosMessages(){
 //TODO: add animations 
 //TODO: add intro todos
 //TODO: adjust css styling of first todo in javascript
-//TODO: fix clear completed
