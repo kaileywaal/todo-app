@@ -1,6 +1,7 @@
 // Render todos saved in local storage on page load
 const getTodosFromStorage = JSON.parse(localStorage.getItem("todos"));
 const todos = getTodosFromStorage || [];
+const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
 displayItemsRemaining();
 addFilterEventListeners();
 
@@ -10,7 +11,6 @@ localStorage.getItem('theme') === 'dark-mode' ? setTheme('dark-mode') : setTheme
 // Store todos array
 localStorage.setItem("todos", JSON.stringify(todos));
 
-
 renderTodos(todos);
 function renderTodos(array) {
      array.forEach(todo => {
@@ -19,6 +19,7 @@ function renderTodos(array) {
     })
 }
 
+checkForNoTodos();
 // Dark mode functionality
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
@@ -34,7 +35,6 @@ function setSunAndMoon(sunOrMoon){
 
 function toggleTheme() {
     const test = localStorage.getItem('theme') === 'dark-mode';
-
     test ? setTheme('light-mode') : setTheme('dark-mode');
     test ? setSunAndMoon('moon') : setSunAndMoon('sun');
 }
@@ -62,7 +62,15 @@ function addTodo(inputValue){
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
     displayItemsRemaining();
+    displayAllTodos();
     input.value = "";
+}
+
+function displayAllTodos(){
+    let activeFilter = filters.find(filter => filter.innerHTML = 'All').innerHTML;
+    highlightFilterLabel(activeFilter);
+    let checklistItems = Array.from(document.querySelectorAll(".checklist__item"));
+    checklistItems.forEach(item => { item.style.display = 'flex' });
 }
 
 function Todo(content, completed = false) {
@@ -108,13 +116,13 @@ function Todo(content, completed = false) {
         if (event.target.classList.contains('checkbox')) {
             this.completed = (this.completed === true) ? false : true;
             this.render();
-            displayItemsRemaining();
             // store new data
             getTodosFromStorage;
             const index = todos.indexOf(this);
             todos.splice(index, 0, this);
             todos.splice(index, 1);
-            localStorage.setItem("todos", JSON.stringify(todos));    
+            localStorage.setItem("todos", JSON.stringify(todos)); 
+            displayItemsRemaining();   
         }
 
         if (event.target.classList.contains('checklist__item--delete')){
@@ -135,6 +143,7 @@ function updateItemsRemaining() {
     return todos.filter(item => item.completed === false).length;
 }
 
+document.addEventListener('click', displayItemsRemaining);
 function displayItemsRemaining() {
     const itemsRemaining = updateItemsRemaining();
 
@@ -147,16 +156,22 @@ function displayItemsRemaining() {
 
 
 // Filter items
+document.addEventListener('click', filterList);
+document.addEventListener('keypress', filterList);
+
 function addFilterEventListeners() {
-    const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
     for(let filter of filters){
-        filter.addEventListener('click', filterList);
+        filter.addEventListener('click', highlightFilterLabelOnClick);
     }
 }
 
-function highlightFilterLabel(clickedElement) {
-    const filters = Array.from(document.querySelectorAll(".toggle-states__state"));
-    let activeFilter = this.innerHTML;
+function highlightFilterLabelOnClick() {
+    let highlightArgument = this.innerHTML;
+    highlightFilterLabel(highlightArgument);
+}
+
+function highlightFilterLabel(element) {
+    let activeFilter = element;
     for(let filter of filters) {
         filter.classList.remove("active");
         if(filter.innerHTML === activeFilter){ 
@@ -166,13 +181,13 @@ function highlightFilterLabel(clickedElement) {
 }
 
 function filterList() {
-    highlightFilterLabel(this);
+    let activeFilter = filters.find(filter => filter.classList.contains('active')).innerHTML;
     let checklistItems = Array.from(document.querySelectorAll(".checklist__item"));
     checklistItems.forEach(item => {
-        if (this.innerHTML === "Active") {
+        if (activeFilter === "Active") {
             return item.style.display = (item.classList.contains("completed")) ? "none" : "flex";  
         }
-        if (this.innerHTML === "Completed") {
+        if (activeFilter === "Completed") {
             return item.style.display = (item.classList.contains("completed")) ? "flex" : "none";
         } 
         else item.style.display = "flex";
@@ -181,7 +196,6 @@ function filterList() {
 }
 
 // Clear completed items
-
 const clearCompletedButton = document.querySelector(".clear-completed");
 clearCompletedButton.addEventListener('click', clearCompleted);
 
@@ -205,4 +219,48 @@ let sortable = Sortable.create(el, {
     }
 )
 
-//TODO: add 'no todos to display' message when there are none'
+//Add 'no todos to display' message when there are none
+document.addEventListener('click', checkForNoTodos);
+
+function checkForNoTodos() {
+    removeNoTodosMessages();
+    const checklistItems = document.querySelectorAll('.checklist__item');
+    const activeFilter = filters.find(filter => filter.classList.contains('active')).innerHTML;
+    const noTodosMessage = 'You have nothing left to do!';
+    const noActiveTodosMessage = 'You have no active todos to display.';
+    const noCompletedTodosMessage = 'You have no completed todos to display';
+    
+        if (activeFilter === "All" && checklistItems.length === 0) {
+            addNoTodosMessage(noTodosMessage);
+        }
+
+        const activeTodos = todos.filter(todo => todo.completed === false);
+        if (activeFilter === "Active" && activeTodos.length === 0) {
+            addNoTodosMessage(noActiveTodosMessage);
+        }
+
+        const completedTodos = todos.filter(todo => todo.completed === true);
+        if (activeFilter === "Completed" && completedTodos.length === 0) {
+            addNoTodosMessage(noCompletedTodosMessage);
+        }
+}
+
+
+function addNoTodosMessage(message) {
+    const li = document.createElement("li");
+    li.classList = "no-todos-message";
+    li.style['border-radius'] = "0.5rem 0.5rem 0 0";
+    document.querySelector(".checklist").appendChild(li);
+    li.innerHTML = message
+}
+
+function removeNoTodosMessages(){
+    const renderedNoTodosMessages = Array.from(document.querySelectorAll('.no-todos-message'));
+    renderedNoTodosMessages.map(message => message.remove());
+}
+
+
+
+//TODO: add animations 
+//TODO: add intro todos
+//TODO: adjust css styling of first todo in javascript

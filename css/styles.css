@@ -72,6 +72,12 @@ h1 {
   }
 }
 
+@media screen and (min-width: 1024px) {
+  html {
+    background-size: 100%;
+  }
+}
+
 /* Container */
 .container {
   margin: 0 4rem;
@@ -126,11 +132,8 @@ h1 {
   margin-bottom: 0;
 }
 
-.dark-mode .checklist {
-  background-color: var(--color-list);
-}
-
-.checklist__item {
+.checklist__item,
+.no-todos-message {
   list-style: none;
   padding: 2rem;
   display: flex;
@@ -260,7 +263,8 @@ input::placeholder {
   cursor: pointer;
 }
 
-.active {
+.active,
+.active:hover {
   color: var(--color-active);
 }
 
